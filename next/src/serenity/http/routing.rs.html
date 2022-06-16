@@ -3761,7 +3761,7 @@
     }
 
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guild_prune</span>(<span class="ident">guild_id</span>: <span class="ident">u64</span>, <span class="ident">days</span>: <span class="ident">u64</span>) -&gt; <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guild_prune</span>(<span class="ident">guild_id</span>: <span class="ident">u64</span>, <span class="ident">days</span>: <span class="ident">u8</span>) -&gt; <span class="ident">String</span> {
         <span class="macro">api!</span>(<span class="string">&quot;/guilds/{}/prune?days={}&quot;</span>, <span class="ident">guild_id</span>, <span class="ident">days</span>)
     }
 
@@ -4016,7 +4016,7 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">api!</span>(<span class="string">&quot;/webhooks/{}/{}?wait={}&quot;</span>, <span class="ident">webhook_id</span>, <span class="ident">token</span>, <span class="ident">wait</span>);
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">thread_id</span>) <span class="op">=</span> <span class="ident">thread_id</span> {
-            <span class="ident">s</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;&amp;thread_id={}&quot;</span>, <span class="ident">thread_id</span>));
+            <span class="macro">write!</span>(<span class="ident">s</span>, <span class="string">&quot;&amp;thread_id={}&quot;</span>, <span class="ident">thread_id</span>).<span class="ident">unwrap</span>();
         }
 
         <span class="ident">s</span>
@@ -4535,7 +4535,7 @@
         <span class="ident">guild_id</span>: <span class="ident">u64</span>,
     },
     <span class="ident">GetGuildPruneCount</span> {
-        <span class="ident">days</span>: <span class="ident">u64</span>,
+        <span class="ident">days</span>: <span class="ident">u8</span>,
         <span class="ident">guild_id</span>: <span class="ident">u64</span>,
     },
     <span class="ident">GetGuildRegions</span> {
@@ -4660,7 +4660,7 @@
         <span class="ident">limit</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
     },
     <span class="ident">StartGuildPrune</span> {
-        <span class="ident">days</span>: <span class="ident">u64</span>,
+        <span class="ident">days</span>: <span class="ident">u8</span>,
         <span class="ident">guild_id</span>: <span class="ident">u64</span>,
     },
     <span class="ident">StartIntegrationSync</span> {
