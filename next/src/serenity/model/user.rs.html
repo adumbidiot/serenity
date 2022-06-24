@@ -1378,11 +1378,24 @@
 <span id="1373">1373</span>
 <span id="1374">1374</span>
 <span id="1375">1375</span>
+<span id="1376">1376</span>
+<span id="1377">1377</span>
+<span id="1378">1378</span>
+<span id="1379">1379</span>
+<span id="1380">1380</span>
+<span id="1381">1381</span>
+<span id="1382">1382</span>
+<span id="1383">1383</span>
+<span id="1384">1384</span>
+<span id="1385">1385</span>
+<span id="1386">1386</span>
 </pre><pre class="rust"><code><span class="doccomment">//! User information-related models.</span>
 
 <span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">std::fmt::Write</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;temp_cache&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
 
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
@@ -1390,7 +1403,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::builder</span>::{<span class="ident">CreateBotAuthParameters</span>, <span class="ident">CreateMessage</span>, <span class="ident">EditProfile</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>))]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cache::Cache</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::cache</span>::{<span class="ident">Cache</span>, <span class="ident">UserRef</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;collector&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::client::bridge::gateway::ShardMessenger</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;collector&quot;</span>)]</span>
@@ -1405,8 +1418,6 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http</span>::{<span class="ident">CacheHttp</span>, <span class="ident">Http</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::internal::prelude</span>::<span class="kw-2">*</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::json</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::json::json</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::json::to_string</span>;
@@ -1547,7 +1558,7 @@
 }
 
 <span class="doccomment">/// Information about the current user.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Default</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CurrentUser</span> {
     <span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">UserId</span>,
@@ -1645,18 +1656,11 @@
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">EditProfile</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">EditProfile</span>,
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">HashMap::new</span>();
-        <span class="ident">map</span>.<span class="ident">insert</span>(<span class="string">&quot;username&quot;</span>, <span class="ident">Value::from</span>(<span class="self">self</span>.<span class="ident">name</span>.<span class="ident">clone</span>()));
-
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">email</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">email</span>.<span class="ident">as_ref</span>() {
-            <span class="ident">map</span>.<span class="ident">insert</span>(<span class="string">&quot;email&quot;</span>, <span class="ident">Value::from</span>(<span class="ident">email</span>.<span class="ident">clone</span>()));
-        }
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">edit_profile</span> <span class="op">=</span> <span class="ident">EditProfile</span>(<span class="ident">map</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">edit_profile</span> <span class="op">=</span> <span class="ident">EditProfile::default</span>();
+        <span class="ident">edit_profile</span>.<span class="ident">username</span>(<span class="self">self</span>.<span class="ident">name</span>.<span class="ident">clone</span>());
         <span class="ident">f</span>(<span class="kw-2">&amp;mut</span> <span class="ident">edit_profile</span>);
-        <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">json::hashmap_to_json_map</span>(<span class="ident">edit_profile</span>.<span class="number">0</span>);
 
-        <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">http</span>.<span class="ident">as_ref</span>().<span class="ident">edit_profile</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="ident">http</span>.<span class="ident">as_ref</span>().<span class="ident">edit_profile</span>(<span class="kw-2">&amp;</span><span class="ident">edit_profile</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
@@ -1710,7 +1714,7 @@
                 .<span class="ident">as_ref</span>()
                 .<span class="ident">get_guilds</span>(
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">GuildPagination::After</span>(
-                        <span class="ident">guilds</span>.<span class="ident">last</span>().<span class="ident">map_or</span>(<span class="ident">GuildId</span>(<span class="number">1</span>), <span class="op">|</span><span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">GuildInfo</span><span class="op">|</span> <span class="ident">g</span>.<span class="ident">id</span>),
+                        <span class="ident">guilds</span>.<span class="ident">last</span>().<span class="ident">map_or</span>(<span class="ident">GuildId::new</span>(<span class="number">1</span>), <span class="op">|</span><span class="ident">g</span>: <span class="kw-2">&amp;</span><span class="ident">GuildInfo</span><span class="op">|</span> <span class="ident">g</span>.<span class="ident">id</span>),
                     )),
                     <span class="prelude-val">Some</span>(<span class="number">100</span>),
                 )
@@ -1922,12 +1926,30 @@
     }
 }
 
+<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">CurrentUser</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">id</span>: <span class="ident">UserId::new</span>(<span class="number">1</span>),
+            <span class="ident">avatar</span>: <span class="prelude-val">None</span>,
+            <span class="ident">bot</span>: <span class="ident">Default::default</span>(),
+            <span class="ident">discriminator</span>: <span class="ident">Default::default</span>(),
+            <span class="ident">email</span>: <span class="prelude-val">None</span>,
+            <span class="ident">mfa_enabled</span>: <span class="ident">Default::default</span>(),
+            <span class="ident">name</span>: <span class="ident">String::default</span>(),
+            <span class="ident">verified</span>: <span class="prelude-val">None</span>,
+            <span class="ident">public_flags</span>: <span class="prelude-val">None</span>,
+            <span class="ident">banner</span>: <span class="prelude-val">None</span>,
+            <span class="ident">accent_colour</span>: <span class="prelude-val">None</span>,
+        }
+    }
+}
+
 <span class="doccomment">/// An enum that represents a default avatar.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The default avatar is calculated via the result of `discriminator % 5`.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The has of the avatar can be retrieved via calling [`Self::name`] on the enum.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Hash</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Serialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DefaultAvatar</span> {
     <span class="doccomment">/// The avatar when the result is `0`.</span>
@@ -1969,7 +1991,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`DoNotDisturb`]: OnlineStatus::DoNotDisturb</span>
 <span class="doccomment">/// [`Invisible`]: OnlineStatus::Invisible</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Serialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">OnlineStatus</span> {
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename</span> <span class="op">=</span> <span class="string">&quot;dnd&quot;</span>)]</span>
@@ -2082,7 +2104,7 @@
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">User</span> {
     <span class="doccomment">/// Initializes a [`User`] with default values. Setting the following:</span>
-    <span class="doccomment">/// - **id** to `UserId(210)`</span>
+    <span class="doccomment">/// - **id** to `UserId::new(210)`</span>
     <span class="doccomment">/// - **avatar** to `Some(&quot;abc&quot;)`</span>
     <span class="doccomment">/// - **bot** to `true`.</span>
     <span class="doccomment">/// - **discriminator** to `1432`.</span>
@@ -2090,7 +2112,7 @@
     <span class="doccomment">/// - **public_flags** to [`None`].</span>
     <span class="kw">fn</span> <span class="ident">default</span>() -&gt; <span class="self">Self</span> {
         <span class="ident">User</span> {
-            <span class="ident">id</span>: <span class="ident">UserId</span>(<span class="number">210</span>),
+            <span class="ident">id</span>: <span class="ident">UserId::new</span>(<span class="number">210</span>),
             <span class="ident">avatar</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;abc&quot;</span>.<span class="ident">to_string</span>()),
             <span class="ident">bot</span>: <span class="bool-val">true</span>,
             <span class="ident">discriminator</span>: <span class="number">1432</span>,
@@ -2196,15 +2218,15 @@
     <span class="doccomment">/// #   #[cfg(feature = &quot;cache&quot;)]</span>
     <span class="doccomment">///     async fn message(&amp;self, ctx: Context, msg: Message) {</span>
     <span class="doccomment">///         if msg.content == &quot;~help&quot; {</span>
-    <span class="doccomment">///             let url =</span>
-    <span class="doccomment">///                 match ctx.cache.current_user().invite_url(&amp;ctx, Permissions::empty()).await {</span>
-    <span class="doccomment">///                     Ok(v) =&gt; v,</span>
-    <span class="doccomment">///                     Err(why) =&gt; {</span>
-    <span class="doccomment">///                         println!(&quot;Error creating invite url: {:?}&quot;, why);</span>
+    <span class="doccomment">///             let current_user = ctx.cache.current_user().clone();</span>
+    <span class="doccomment">///             let url = match current_user.invite_url(&amp;ctx, Permissions::empty()).await {</span>
+    <span class="doccomment">///                 Ok(v) =&gt; v,</span>
+    <span class="doccomment">///                 Err(why) =&gt; {</span>
+    <span class="doccomment">///                     println!(&quot;Error creating invite url: {:?}&quot;, why);</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">///                         return;</span>
-    <span class="doccomment">///                     },</span>
-    <span class="doccomment">///                 };</span>
+    <span class="doccomment">///                     return;</span>
+    <span class="doccomment">///                 },</span>
+    <span class="doccomment">///             };</span>
     <span class="doccomment">///</span>
     <span class="doccomment">///             let help = format!(&quot;Helpful info here. Invite me with this link: &lt;{}&gt;&quot;, url,);</span>
     <span class="doccomment">///</span>
@@ -2484,7 +2506,7 @@
     <span class="doccomment">/// Attempts to find a [`User`] by its Id in the cache.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">to_user_cached</span>(<span class="self">self</span>, <span class="ident">cache</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Cache</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">User</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">to_user_cached</span>(<span class="self">self</span>, <span class="ident">cache</span>: <span class="kw-2">&amp;</span><span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Cache</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">UserRef</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="ident">cache</span>.<span class="ident">as_ref</span>().<span class="ident">user</span>(<span class="self">self</span>)
     }
 
@@ -2512,17 +2534,17 @@
         {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cache</span>) <span class="op">=</span> <span class="ident">cache_http</span>.<span class="ident">cache</span>() {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">user</span>) <span class="op">=</span> <span class="ident">cache</span>.<span class="ident">user</span>(<span class="self">self</span>) {
-                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">user</span>);
+                    <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">user</span>.<span class="ident">clone</span>());
                 }
             }
         }
 
-        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">cache_http</span>.<span class="ident">http</span>().<span class="ident">get_user</span>(<span class="self">self</span>.<span class="number">0</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">user</span> <span class="op">=</span> <span class="ident">cache_http</span>.<span class="ident">http</span>().<span class="ident">get_user</span>(<span class="self">self</span>.<span class="ident">get</span>()).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cache&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;temp_cache&quot;</span>))]</span>
         {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">cache</span>) <span class="op">=</span> <span class="ident">cache_http</span>.<span class="ident">cache</span>() {
-                <span class="ident">cache</span>.<span class="ident">temp_users</span>.<span class="ident">insert</span>(<span class="ident">user</span>.<span class="ident">id</span>, <span class="ident">user</span>.<span class="ident">clone</span>());
+                <span class="ident">cache</span>.<span class="ident">temp_users</span>.<span class="ident">insert</span>(<span class="ident">user</span>.<span class="ident">id</span>, <span class="ident">Arc::new</span>(<span class="ident">user</span>.<span class="ident">clone</span>()));
             }
         }
 

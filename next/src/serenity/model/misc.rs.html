@@ -207,8 +207,6 @@
 <span id="202">202</span>
 <span id="203">203</span>
 <span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Miscellaneous helper traits, enums, and structs for models.</span>
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;utils&quot;</span>))]</span>
@@ -248,12 +246,10 @@
                 <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span>;
 
                 <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">StdResult</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident"><span class="self">Self</span>::Err</span><span class="op">&gt;</span> {
-                    <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">utils</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_function</span>(<span class="ident">s</span>) {
-                        <span class="prelude-val">Some</span>(<span class="ident">id</span>) =&gt; <span class="ident">id</span>,
-                        <span class="prelude-val">None</span> =&gt; <span class="ident">s</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">err::InvalidFormat</span>)<span class="question-mark">?</span>,
-                    };
-
-                    <span class="prelude-val">Ok</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id</span>(<span class="ident">id</span>))
+                    <span class="kw">match</span> <span class="ident">utils</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_function</span>(<span class="ident">s</span>) {
+                        <span class="prelude-val">Some</span>(<span class="ident">id</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">id</span>),
+                        <span class="prelude-val">None</span> =&gt; <span class="ident">s</span>.<span class="ident">parse</span>().<span class="ident">map</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">id::new</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">err::InvalidFormat</span>),
+                    }
                 }
             }
         )<span class="op">*</span>
@@ -267,7 +263,7 @@
 }
 
 <span class="doccomment">/// A version of an emoji used only when solely the animated state, Id, and name are known.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">EmojiIdentifier</span> {
     <span class="doccomment">/// Whether the emoji is animated</span>
     <span class="kw">pub</span> <span class="ident">animated</span>: <span class="ident">bool</span>,
@@ -362,7 +358,7 @@
 }
 
 <span class="doccomment">/// The type of status update during a service incident.</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Hash</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>, <span class="ident">Serialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="attribute">#[<span class="ident">non_exhaustive</span>]</span>
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;snake_case&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">IncidentStatus</span> {
@@ -391,11 +387,11 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_formatters</span>() {
-        <span class="macro">assert_eq!</span>(<span class="ident">ChannelId</span>(<span class="number">1</span>).<span class="ident">to_string</span>(), <span class="string">&quot;1&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">EmojiId</span>(<span class="number">2</span>).<span class="ident">to_string</span>(), <span class="string">&quot;2&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">GuildId</span>(<span class="number">3</span>).<span class="ident">to_string</span>(), <span class="string">&quot;3&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">RoleId</span>(<span class="number">4</span>).<span class="ident">to_string</span>(), <span class="string">&quot;4&quot;</span>);
-        <span class="macro">assert_eq!</span>(<span class="ident">UserId</span>(<span class="number">5</span>).<span class="ident">to_string</span>(), <span class="string">&quot;5&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">ChannelId::new</span>(<span class="number">1</span>).<span class="ident">to_string</span>(), <span class="string">&quot;1&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">EmojiId::new</span>(<span class="number">2</span>).<span class="ident">to_string</span>(), <span class="string">&quot;2&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">GuildId::new</span>(<span class="number">3</span>).<span class="ident">to_string</span>(), <span class="string">&quot;3&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">RoleId::new</span>(<span class="number">4</span>).<span class="ident">to_string</span>(), <span class="string">&quot;4&quot;</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">UserId::new</span>(<span class="number">5</span>).<span class="ident">to_string</span>(), <span class="string">&quot;5&quot;</span>);
     }
 
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;utils&quot;</span>)]</span>
@@ -405,9 +401,9 @@
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;model&quot;</span>)]</span>
         <span class="attribute">#[<span class="ident">test</span>]</span>
         <span class="kw">fn</span> <span class="ident">parse_mentions</span>() {
-            <span class="macro">assert_eq!</span>(<span class="string">&quot;&lt;@1234&gt;&quot;</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">UserId</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>(), <span class="ident">UserId</span>(<span class="number">1234</span>));
-            <span class="macro">assert_eq!</span>(<span class="string">&quot;&lt;@&amp;1234&gt;&quot;</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">RoleId</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>(), <span class="ident">RoleId</span>(<span class="number">1234</span>));
-            <span class="macro">assert_eq!</span>(<span class="string">&quot;&lt;#1234&gt;&quot;</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>(), <span class="ident">ChannelId</span>(<span class="number">1234</span>));
+            <span class="macro">assert_eq!</span>(<span class="string">&quot;&lt;@1234&gt;&quot;</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">UserId</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>(), <span class="ident">UserId::new</span>(<span class="number">1234</span>));
+            <span class="macro">assert_eq!</span>(<span class="string">&quot;&lt;@&amp;1234&gt;&quot;</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">RoleId</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>(), <span class="ident">RoleId::new</span>(<span class="number">1234</span>));
+            <span class="macro">assert_eq!</span>(<span class="string">&quot;&lt;#1234&gt;&quot;</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>(), <span class="ident">ChannelId::new</span>(<span class="number">1234</span>));
 
             <span class="macro">assert!</span>(<span class="string">&quot;&lt;@1234&gt;&quot;</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">ChannelId</span><span class="op">&gt;</span>().<span class="ident">is_err</span>());
             <span class="macro">assert!</span>(<span class="string">&quot;&lt;@&amp;1234&gt;&quot;</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">UserId</span><span class="op">&gt;</span>().<span class="ident">is_err</span>());

@@ -491,8 +491,8 @@
 <span class="doccomment">/// # let role = from_value::&lt;Role&gt;(json!({</span>
 <span class="doccomment">/// #     &quot;color&quot;: Colour::BLURPLE,</span>
 <span class="doccomment">/// #     &quot;hoist&quot;: false,</span>
-<span class="doccomment">/// #     &quot;id&quot;: RoleId(1),</span>
-<span class="doccomment">/// #     &quot;guild_id&quot;: GuildId(2),</span>
+<span class="doccomment">/// #     &quot;id&quot;: RoleId::new(1),</span>
+<span class="doccomment">/// #     &quot;guild_id&quot;: GuildId::new(2),</span>
 <span class="doccomment">/// #     &quot;managed&quot;: false,</span>
 <span class="doccomment">/// #     &quot;mentionable&quot;: false,</span>
 <span class="doccomment">/// #     &quot;name&quot;: &quot;test&quot;,</span>
@@ -534,7 +534,7 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`Role`]: crate::model::guild::Role</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Deserialize</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Serialize</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Deserialize</span>, <span class="ident">Serialize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Colour</span>(<span class="kw">pub</span> <span class="ident">u32</span>);
 
 <span class="kw">impl</span> <span class="ident">Colour</span> {
