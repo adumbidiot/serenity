@@ -4856,7 +4856,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Refer to Discord&#39;s docs for field information.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// **Note**: Requres the [Manage Events] permission.</span>
+    <span class="doccomment">/// **Note**: Requires the [Manage Events] permission.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [Manage Events]: Permissions::MANAGE_EVENTS</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_scheduled_event</span>(
@@ -5026,8 +5026,8 @@
     }
 
     <span class="doccomment">/// Deletes a guild, only if connected account owns it.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_guild</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">guild_id</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PartialGuild</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">fire</span>(<span class="ident">Request</span> {
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_guild</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">guild_id</span>: <span class="ident">u64</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">wind</span>(<span class="number">204</span>, <span class="ident">Request</span> {
             <span class="ident">body</span>: <span class="prelude-val">None</span>,
             <span class="ident">multipart</span>: <span class="prelude-val">None</span>,
             <span class="ident">headers</span>: <span class="prelude-val">None</span>,
@@ -7054,7 +7054,7 @@
         .<span class="kw">await</span>
     }
 
-    <span class="doccomment">/// Gets a list of all scheduled events for the coressponding guild.</span>
+    <span class="doccomment">/// Gets a list of all scheduled events for the corresponding guild.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// **Note**: Requires the [Manage Events] permission.</span>
     <span class="doccomment">///</span>
