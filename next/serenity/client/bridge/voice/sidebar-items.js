@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":[["VoiceGatewayManager","Interface for any compatible voice plugin."]]};
+initSidebarItems({"trait":[["VoiceGatewayManager","Interface for any compatible voice plugin."]]});

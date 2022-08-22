@@ -1,10 +1,9 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/model/application/command.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>command.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script><script defer src="../../../../main.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../serenity/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/model/application/command.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>command.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../../serenity/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
     <nav class="sidebar"><a class="sidebar-logo" href="../../../../serenity/index.html"><div class="logo-container"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../serenity/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../../serenity/index.html"><img class="rust-logo" src="../../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -417,16 +416,66 @@
 <span id="411">411</span>
 <span id="412">412</span>
 <span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::collections::HashMap</span>;
 
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::builder::CreateApplicationCommand</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::builder</span>::{<span class="ident">CreateApplicationCommand</span>, <span class="ident">CreateApplicationCommands</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::Result</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::http::Http</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::internal::prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::json::Value</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::channel::ChannelType</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::model::id</span>::{
@@ -500,7 +549,8 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Command</span> {
-    <span class="doccomment">/// Create a global [`Command`], overriding an existing one with the same name if it exists.</span>
+    <span class="doccomment">/// Creates a global [`Command`],</span>
+    <span class="doccomment">/// overriding an existing one with the same name if it exists.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// When a created [`Command`] is used, the [`InteractionCreate`] event will be emitted.</span>
     <span class="doccomment">///</span>
@@ -520,12 +570,13 @@
     <span class="doccomment">/// #</span>
     <span class="doccomment">/// # async fn run() {</span>
     <span class="doccomment">/// # let http = Arc::new(Http::new(&quot;token&quot;));</span>
-    <span class="doccomment">/// use serenity::builder::CreateApplicationCommand;</span>
     <span class="doccomment">/// use serenity::model::application::command::Command;</span>
     <span class="doccomment">/// use serenity::model::id::ApplicationId;</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// let builder = CreateApplicationCommand::new(&quot;ping&quot;, &quot;A simple ping command&quot;);</span>
-    <span class="doccomment">/// let _ = Command::create_global_application_command(&amp;http, builder).await;</span>
+    <span class="doccomment">/// let _ = Command::create_global_application_command(&amp;http, |command| {</span>
+    <span class="doccomment">///     command.name(&quot;ping&quot;).description(&quot;A simple ping command&quot;)</span>
+    <span class="doccomment">/// })</span>
+    <span class="doccomment">/// .await;</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
@@ -537,56 +588,88 @@
     <span class="doccomment">/// #</span>
     <span class="doccomment">/// # async fn run() {</span>
     <span class="doccomment">/// # let http = Arc::new(Http::new(&quot;token&quot;));</span>
-    <span class="doccomment">/// use serenity::builder::{</span>
-    <span class="doccomment">///     CreateApplicationCommand,</span>
-    <span class="doccomment">///     CreateApplicationCommandOption as CreateOption,</span>
-    <span class="doccomment">/// };</span>
     <span class="doccomment">/// use serenity::model::application::command::{Command, CommandOptionType};</span>
     <span class="doccomment">/// use serenity::model::id::ApplicationId;</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// let builder = CreateApplicationCommand::new(&quot;echo&quot;, &quot;Makes the bot send a message&quot;).add_option(</span>
-    <span class="doccomment">///     CreateOption::new(CommandOptionType::String, &quot;message&quot;, &quot;The message to send&quot;)</span>
-    <span class="doccomment">///         .required(true),</span>
-    <span class="doccomment">/// );</span>
-    <span class="doccomment">/// let _ = Command::create_global_application_command(&amp;http, builder).await;</span>
+    <span class="doccomment">/// let _ = Command::create_global_application_command(&amp;http, |command| {</span>
+    <span class="doccomment">///     command.name(&quot;echo&quot;).description(&quot;Makes the bot send a message&quot;).create_option(|option| {</span>
+    <span class="doccomment">///         option</span>
+    <span class="doccomment">///             .name(&quot;message&quot;)</span>
+    <span class="doccomment">///             .description(&quot;The message to send&quot;)</span>
+    <span class="doccomment">///             .kind(CommandOptionType::String)</span>
+    <span class="doccomment">///             .required(true)</span>
+    <span class="doccomment">///     })</span>
+    <span class="doccomment">/// })</span>
+    <span class="doccomment">/// .await;</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// See [`CreateApplicationCommand::execute`] for a list of possible errors.</span>
+    <span class="doccomment">/// May return an [`Error::Http`] if the [`Command`] is illformed,</span>
+    <span class="doccomment">/// such as if more than 10 [`choices`] are set. See the [API Docs] for further details.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Can also return an [`Error::Json`] if there is an error in deserializing</span>
+    <span class="doccomment">/// the response.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`InteractionCreate`]: crate::client::EventHandler::interaction_create</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_global_application_command</span>(
+    <span class="doccomment">/// [API Docs]: https://discord.com/developers/docs/interactions/slash-commands</span>
+    <span class="doccomment">/// [`Error::Http`]: crate::error::Error::Http</span>
+    <span class="doccomment">/// [`Error::Json`]: crate::error::Error::Json</span>
+    <span class="doccomment">/// [`choices`]: CommandOption::choices</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">create_global_application_command</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
         <span class="ident">http</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Http</span><span class="op">&gt;</span>,
-        <span class="ident">builder</span>: <span class="ident">CreateApplicationCommand</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span> {
-        <span class="ident">builder</span>.<span class="ident">execute</span>(<span class="ident">http</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>).<span class="kw">await</span>
+        <span class="ident">f</span>: <span class="ident">F</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">CreateApplicationCommand</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">CreateApplicationCommand</span>,
+    {
+        <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">Command::build_application_command</span>(<span class="ident">f</span>);
+        <span class="ident">http</span>.<span class="ident">as_ref</span>().<span class="ident">create_global_application_command</span>(<span class="kw-2">&amp;</span><span class="ident">map</span>).<span class="kw">await</span>
     }
 
-    <span class="doccomment">/// Override all global application commands.</span>
+    <span class="doccomment">/// Overrides all global application commands.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`create_global_application_command`]: Self::create_global_application_command</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// Returns the same errors as [`Self::create_global_application_command`].</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_global_application_commands</span>(
+    <span class="doccomment">/// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`Error::Http`]: crate::error::Error::Http</span>
+    <span class="doccomment">/// [`Error::Json`]: crate::error::Error::Json</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">set_global_application_commands</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
         <span class="ident">http</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Http</span><span class="op">&gt;</span>,
-        <span class="ident">commands</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">CreateApplicationCommand</span><span class="op">&gt;</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="ident">http</span>.<span class="ident">as_ref</span>().<span class="ident">create_global_application_commands</span>(<span class="kw-2">&amp;</span><span class="ident">commands</span>).<span class="kw">await</span>
+        <span class="ident">f</span>: <span class="ident">F</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">CreateApplicationCommands</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">CreateApplicationCommands</span>,
+    {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">array</span> <span class="op">=</span> <span class="ident">CreateApplicationCommands::default</span>();
+
+        <span class="ident">f</span>(<span class="kw-2">&amp;mut</span> <span class="ident">array</span>);
+
+        <span class="ident">http</span>.<span class="ident">as_ref</span>().<span class="ident">create_global_application_commands</span>(<span class="kw-2">&amp;</span><span class="ident">array</span>).<span class="kw">await</span>
     }
 
-    <span class="doccomment">/// Edit a global command, given its Id.</span>
+    <span class="doccomment">/// Edits a global command by its Id.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// See [`CreateApplicationCommand::execute`] for a list of possible errors.</span>
-    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">edit_global_application_command</span>(
+    <span class="doccomment">/// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`Error::Http`]: crate::error::Error::Http</span>
+    <span class="doccomment">/// [`Error::Json`]: crate::error::Error::Json</span>
+    <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">edit_global_application_command</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(
         <span class="ident">http</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Http</span><span class="op">&gt;</span>,
         <span class="ident">command_id</span>: <span class="ident">CommandId</span>,
-        <span class="ident">builder</span>: <span class="ident">CreateApplicationCommand</span>,
-    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span> {
-        <span class="ident">builder</span>.<span class="ident">execute</span>(<span class="ident">http</span>, <span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="ident">command_id</span>)).<span class="kw">await</span>
+        <span class="ident">f</span>: <span class="ident">F</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">CreateApplicationCommand</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">CreateApplicationCommand</span>,
+    {
+        <span class="kw">let</span> <span class="ident">map</span> <span class="op">=</span> <span class="ident">Command::build_application_command</span>(<span class="ident">f</span>);
+        <span class="ident">http</span>.<span class="ident">as_ref</span>().<span class="ident">edit_global_application_command</span>(<span class="ident">command_id</span>.<span class="ident">into</span>(), <span class="kw-2">&amp;</span><span class="ident">map</span>).<span class="kw">await</span>
     }
 
     <span class="doccomment">/// Gets all global commands.</span>
@@ -594,6 +677,9 @@
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`Error::Http`]: crate::error::Error::Http</span>
+    <span class="doccomment">/// [`Error::Json`]: crate::error::Error::Json</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_global_application_commands</span>(<span class="ident">http</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Http</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Command</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="ident">http</span>.<span class="ident">as_ref</span>().<span class="ident">get_global_application_commands</span>().<span class="kw">await</span>
     }
@@ -603,6 +689,9 @@
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`Error::Http`]: crate::error::Error::Http</span>
+    <span class="doccomment">/// [`Error::Json`]: crate::error::Error::Json</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_global_application_command</span>(
         <span class="ident">http</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Http</span><span class="op">&gt;</span>,
         <span class="ident">command_id</span>: <span class="ident">CommandId</span>,
@@ -615,11 +704,27 @@
     <span class="doccomment">/// # Errors</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// If there is an error, it will be either [`Error::Http`] or [`Error::Json`].</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [`Error::Http`]: crate::error::Error::Http</span>
+    <span class="doccomment">/// [`Error::Json`]: crate::error::Error::Json</span>
     <span class="kw">pub</span> <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">delete_global_application_command</span>(
         <span class="ident">http</span>: <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Http</span><span class="op">&gt;</span>,
         <span class="ident">command_id</span>: <span class="ident">CommandId</span>,
     ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">http</span>.<span class="ident">as_ref</span>().<span class="ident">delete_global_application_command</span>(<span class="ident">command_id</span>.<span class="ident">into</span>()).<span class="kw">await</span>
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;http&quot;</span>)]</span>
+<span class="kw">impl</span> <span class="ident">Command</span> {
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">build_application_command</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="ident">CreateApplicationCommand</span>
+    <span class="kw">where</span>
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="ident">CreateApplicationCommand</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">CreateApplicationCommand</span>,
+    {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">create_application_command</span> <span class="op">=</span> <span class="ident">CreateApplicationCommand::default</span>();
+        <span class="ident">f</span>(<span class="kw-2">&amp;mut</span> <span class="ident">create_application_command</span>);
+        <span class="ident">create_application_command</span>
     }
 }
 
@@ -687,12 +792,6 @@
     <span class="doccomment">/// Maximum permitted value for Integer or Number options</span>
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="kw">pub</span> <span class="ident">max_value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">serde_json::Number</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// Minimum permitted length for String options</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">min_length</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>,
-    <span class="doccomment">/// Maximum permitted length for String options</span>
-    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
-    <span class="kw">pub</span> <span class="ident">max_length</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="kw">pub</span> <span class="ident">autocomplete</span>: <span class="ident">bool</span>,
 }
@@ -831,5 +930,5 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="serenity" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0-nightly (10f4ce324 2022-06-22)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="serenity" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0-nightly (3c17c84a3 2022-03-21)" ></div>
 </body></html>

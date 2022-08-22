@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["StickerItem","The smallest amount of data required to render a sticker."]]};
+initSidebarItems({"struct":[["StickerItem","The smallest amount of data required to render a sticker."]]});
